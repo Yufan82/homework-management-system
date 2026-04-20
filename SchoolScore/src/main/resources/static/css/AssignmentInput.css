@@ -1,0 +1,44 @@
+@charset "UTF-8";
+
+/* 淺藍色背景 */
+body {
+	background-color: #e3f2fd; /* Light Blue 50 */
+	font-family: "Microsoft JhengHei", sans-serif;
+	padding-bottom: 50px;
+}
+
+/* 自定義 10 欄網格 */
+.row-cols-10>* {
+	flex: 0 0 auto;
+	width: 10%;
+}
+
+/* 數字方塊樣式 */
+.num-box {
+	aspect-ratio: 1/1;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid #dee2e6;
+	background-color: white;
+	cursor: pointer;
+	transition: all 0.2s;
+	user-select: none;
+	font-weight: bold;
+}
+
+.num-box:hover {
+	background-color: #bbdefb;
+}
+
+.num-box.active {
+	background-color: #0d6efd;
+	color: white;
+	border-color: #0d6efd;
+}
+
+/* 容器陰影與圓角微調 */
+.container {
+	max-width: 900px;
+	border: 1px solid #bbdefb;
+}

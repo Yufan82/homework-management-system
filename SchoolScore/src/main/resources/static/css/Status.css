@@ -1,0 +1,65 @@
+@charset "UTF-8";
+
+:root {
+    --bg-light-blue: #f0f7ff;
+    --border-blue: #cfe2ff;
+    --text-dark-blue: #084298;
+}
+
+/* 科目標籤樣式 */
+.nav-tabs .nav-link {
+    color: #495057;
+    background-color: #e9ecef;
+    border: 1px solid #dee2e6;
+    margin-right: 5px;
+    border-radius: 8px 8px 0 0;
+}
+
+.nav-tabs .nav-link.active {
+    background-color: #fff !important;
+    border-bottom-color: transparent !important;
+    color: #0d6efd !important;
+    font-weight: bold;
+}
+
+/* 類別與作業區塊 */
+.category-group {
+    border-left: 5px solid #0d6efd;
+    background-color: var(--bg-light-blue);
+    padding: 15px;
+    margin-bottom: 20px;
+    border-radius: 0 8px 8px 0;
+}
+
+.assignment-row {
+    display: flex;
+    align-items: center;
+    background: #fff;
+    padding: 10px 15px;
+    border: 1px solid var(--border-blue);
+    margin-top: 10px;
+    border-radius: 6px;
+}
+
+.assignment-title {
+    min-width: 120px;
+    font-weight: 600;
+    color: var(--text-dark-blue);
+}
+
+/* 座號按鈕 [cite: 4] */
+.seat-btn {
+    width: 42px;
+    height: 42px;
+    margin: 2px;
+    font-size: 0.9rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+}
+
+.seat-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}

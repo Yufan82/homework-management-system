@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: SchoolScore
+
+  datasource:
+    url: jdbc:mysql://localhost:3306/schoolscore?useSSL=false&serverTimezone=Asia/Taipei
+    username: root
+    password: Password123
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+
+  liquibase:
+    enabled: true
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+server:
+  port: 8081

@@ -1,0 +1,178 @@
+databaseChangeLog:
+  # 1. 建立 Subject (科目) 表
+  - changeSet:
+      id: 20260319-1
+      author: Gemini
+      changes:
+        - createTable:
+            tableName: subject
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+        # 預設資料填充
+        - insert:
+            tableName: subject
+            columns:
+              - column: { name: name, value: "國文" }
+        - insert:
+            tableName: subject
+            columns:
+              - column: { name: name, value: "英文" }
+        - insert:
+            tableName: subject
+            columns:
+              - column: { name: name, value: "數學" }
+        - insert:
+            tableName: subject
+            columns:
+              - column: { name: name, value: "自然" }
+        - insert:
+            tableName: subject
+            columns:
+              - column: { name: name, value: "社會" }
+        - insert:
+            tableName: subject
+            columns:
+              - column: { name: name, value: "其他" }
+
+  # 2. 建立 Category (類別) 表
+  - changeSet:
+      id: 20260319-2
+      author: Gemini
+      changes:
+        - createTable:
+            tableName: category
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(50)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: subject_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_category_subject
+                    referencedTableName: subject
+                    referencedColumnNames: id
+
+  # 3. 建立 Assignment (作業主體) 表
+  - changeSet:
+      id: 20260319-3
+      author: Gemini
+      changes:
+        - createTable:
+            tableName: assignment
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: item
+                  type: VARCHAR(255)
+                  constraints:
+                    nullable: false # 項目名稱必填
+              - column:
+                  name: page_range
+                  type: VARCHAR(100) # 頁碼可為 null
+              - column:
+                  name: assign_date
+                  type: DATE # 日期可為 null
+              - column:
+                  name: subject_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_assignment_subject
+                    referencedTableName: subject
+                    referencedColumnNames: id
+              - column:
+                  name: category_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_assignment_category
+                    referencedTableName: category
+                    referencedColumnNames: id
+
+  # 4. 建立 HomeworkStatus (作業狀態核心表)
+  - changeSet:
+      id: 20260319-4
+      author: Gemini
+      changes:
+        - createTable:
+            tableName: homework_status
+            columns:
+              - column:
+                  name: id
+                  type: BIGINT
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: assignment_id
+                  type: BIGINT
+                  constraints:
+                    nullable: false
+                    foreignKeyName: fk_status_assignment
+                    referencedTableName: assignment
+                    referencedColumnNames: id
+                    deleteCascade: true # 支援一鍵清空邏輯
+              - column:
+                  name: seat_no
+                  type: INT # 座號 1~40
+                  constraints:
+                    nullable: false
+              - column:
+                  name: submitted
+                  type: BOOLEAN
+                  defaultValueBoolean: true # 系統預設自動產生為 true
+                  constraints:
+                    nullable: false
+              - column:
+                  name: corrected
+                  type: BOOLEAN
+                  defaultValueBoolean: false
+                  constraints:
+                    nullable: false
+              - column:
+                  name: submit_time
+                  type: DATETIME
+              - column:
+                  name: correct_time
+                  type: DATETIME
+        # 建立唯一約束
+        - addUniqueConstraint:
+            tableName: homework_status
+            columnNames: assignment_id, seat_no
+            constraintName: uk_assignment_seat
+        # 建立索引優化查詢
+        - createIndex:
+            tableName: homework_status
+            indexName: idx_status_seat_submitted
+            columns:
+              - column: { name: seat_no }
+              - column: { name: submitted }

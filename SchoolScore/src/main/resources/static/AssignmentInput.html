@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>作業建立頁面</title>
+
+<!-- Bootstrap 5 -->
+<link
+	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+	rel="stylesheet">
+<link rel="stylesheet" href="/css/AssignmentInput.css">
+</head>
+
+<body>
+
+	<nav class="navbar navbar-expand-lg navbar-dark bg-primary mb-4">
+		<div class="container-fluid">
+			<span class="navbar-brand mb-0 h1 mx-auto">導覽列</span>
+		</div>
+	</nav>
+
+	<div class="container bg-white p-4 rounded shadow-sm">
+		<div class="row g-3 mb-4">
+		
+			<div class="col-md-2">
+				<label class="form-label">科目</label> <select class="form-select"
+					id="subject">
+					<option selected disabled>請選擇科目</option>
+				</select>
+			</div>
+			
+			<div class="col-md-2">
+				<label class="form-label">類別</label> <select class="form-select"
+					id="category">
+					<option selected disabled>先選擇科目</option>
+				</select>
+			</div>
+			<div class="col-md-3">
+				<label class="form-label">名稱</label> <input type="text"
+					class="form-control" id="name" placeholder="輸入名稱">
+			</div>
+			<div class="col-md-2">
+				<label class="form-label">頁碼或單元 (可空)</label> <input type="text"
+					class="form-control" id="pageNumber">
+			</div>
+			<div class="col-md-3">
+				<label class="form-label">日期</label> <input type="date"
+					class="form-control" id="date">
+			</div>
+		</div>
+
+		<div class="border rounded p-3 mb-4 bg-light">
+			<div class="row row-cols-10 g-2" id="numberGrid"></div>
+		</div>
+
+		<div class="d-flex gap-3">
+			<button type="button" class="btn btn-primary px-4" id="btnSubmit">送出</button>
+			<button type="button" class="btn btn-secondary px-4" id="btnReset">更正</button>
+		</div>
+	</div>
+
+	<script src="/js/AssignmentInput.js"></script>
+
+	<div class="mt-4">
+		<h5>測試 JSON 輸出</h5>
+		<pre id="jsonOutput"
+			style="background: #f5f7fa; padding: 15px; border-radius: 8px;"></pre>
+	</div>
+</body>
+</html>

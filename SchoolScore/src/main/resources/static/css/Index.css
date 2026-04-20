@@ -1,0 +1,64 @@
+body {
+	background-color: #eaf6ff;
+	font-family: "Microsoft JhengHei", sans-serif;
+}
+
+.main-container {
+	border: 4px solid black;
+	padding: 20px;
+	margin-top: 30px;
+	background-color: white;
+}
+
+.nav-bar {
+	border: 3px solid black;
+	padding: 20px;
+	margin-bottom: 30px;
+	background-color: #d6ecff;
+}
+
+.subject-card {
+	border: 3px solid black;
+	height: 120px;
+	margin-bottom: 25px;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	background-color: #f8fcff;
+	transition: 0.2s;
+	position: relative;
+}
+
+.subject-card:hover {
+	background-color: #cce7ff;
+}
+
+/* 未交狀態 */
+.subject-card.has-unsubmitted {
+	background-color: #ffdddd;
+	border-color: red;
+}
+
+.subject-card.has-unsubmitted:hover {
+	background-color: #ffb3b3;
+}
+
+/* 科目名稱 */
+.subject-name {
+	font-size: 20px;
+	font-weight: bold;
+}
+
+/* 未交人數 */
+.badge-unsubmitted {
+	position: absolute;
+	top: 10px;
+	right: 15px;
+	background-color: red;
+	color: white;
+	padding: 5px 10px;
+	border-radius: 20px;
+	font-size: 14px;
+}

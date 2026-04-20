@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>學生作業提交系統 - 作業繳交狀況查詢</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/Status.css">
+</head>
+<body class="bg-light">
+
+<div class="container py-4">
+    <header class="d-flex justify-content-between align-items-center mb-4">
+        <h3 class="text-primary fw-bold">作業繳交狀況查詢</h3>
+        <button id="resetBtn" class="btn btn-outline-danger btn-sm">一鍵清空資料</button>
+    </header>
+
+    <ul class="nav nav-tabs border-bottom-0" id="subjectTab" role="tablist">
+        </ul>
+
+    <div class="card shadow-sm border-top-0 rounded-bottom">
+        <div class="card-body p-4" id="assignmentContent">
+            <div class="text-center text-muted">請選擇上方科目以顯示資料</div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="/js/Status.js"></script>
+</body>
+</html>

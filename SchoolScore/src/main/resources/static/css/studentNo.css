@@ -1,0 +1,36 @@
+@charset "UTF-8";
+
+body {
+    background-color: #f0f8ff;
+}
+
+.bg-light-blue {
+    background-color: #cfe8ff;
+}
+
+.seat-panel, .content-panel {
+    background-color: #ffffff;
+    border: 2px solid #b3d7ff;
+    border-radius: 10px;
+}
+
+.seat-btn {
+    width: 60px;
+    margin: 5px;
+}
+
+.subject-title {
+    font-weight: bold;
+    font-size: 20px;
+    margin-top: 15px;
+}
+
+.category-title {
+    margin-left: 15px;
+    font-weight: bold;
+}
+
+.assignment-btn {
+    margin-left: 30px;
+    margin-bottom: 5px;
+}

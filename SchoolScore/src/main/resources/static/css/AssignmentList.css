@@ -1,0 +1,47 @@
+@charset "UTF-8";
+
+body {
+	background-color: #f4f9ff;
+}
+
+/* 外框 */
+.header-box {
+	background-color: #d9ecff;
+	padding: 15px;
+	border-radius: 10px;
+	border: 2px solid #90c2ff;
+}
+
+/* 科目區 */
+.subject-box {
+	background-color: #ffffff;
+	border-left: 6px solid #5aa9ff;
+	padding: 15px;
+	margin-bottom: 20px;
+	border-radius: 10px;
+}
+
+/* 類別區 */
+.category-box {
+	background-color: #eef6ff;
+	padding: 10px;
+	margin-top: 10px;
+	border-radius: 8px;
+}
+
+/* 作業列 */
+.assignment-row {
+	background-color: #ffffff;
+	border: 1px solid #cce0ff;
+	border-radius: 8px;
+	padding: 10px;
+	margin-top: 10px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+/* 按鈕 */
+.btn-custom {
+	margin-left: 5px;
+}
