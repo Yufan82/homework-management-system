@@ -80,17 +80,39 @@ public class HomeworkStatusServiceImpl implements HomeworkStatusService {
 	// 依科目查詢未完成作業
 	@Override
 	public List<HomeworkStatus> findUnfinishedBySubject(Long subjectId) {
-
-		// 1. 找出該科目下所有的 Assignment 物件
-		List<Assignment> assignments = assignmentDao.findAll().stream()
-				.filter(a -> a.getSubject() != null && a.getSubject().getId().equals(subjectId)).toList();
-
-		// 2. 獲取這些作業的 ID 清單
-		List<Long> targetIds = assignments.stream().map(Assignment::getId).toList();
-
-		// 3. 篩選狀態：作業 ID 匹配且（未繳 OR 未訂正）
+		
+		// 使用子方法
+		List<Long> assignmentIds = getAssignmentBySubjectId(subjectId);
+		
+		return filterUnfinishedStatus(assignmentIds);
+		
+		
+//		// 1. 找出該科目下所有的 Assignment 物件
+//		List<Assignment> assignments = assignmentDao.findAll().stream()
+//				.filter(a -> a.getSubject() != null && a.getSubject().getId().equals(subjectId)).toList();
+//
+//		// 2. 獲取這些作業的 ID 清單
+//		List<Long> targetIds = assignments.stream().map(Assignment::getId).toList();
+//
+//		// 3. 篩選狀態：作業 ID 匹配且（未繳 OR 未訂正）
+//		return dao.findAll().stream()
+//				.filter(s -> s.getAssignment() != null && targetIds.contains(s.getAssignment().getId()))
+//				.filter(s -> !s.isSubmitted() || !s.isCorrected()).collect(Collectors.toList());
+	
+	}
+	
+	// 分成 子方法
+	protected List<Long> getAssignmentBySubjectId(Long subjectId){
+		return assignmentDao.findAll()
+				.stream()
+				.filter(a -> a.getSubject() != null && a.getSubject().getId().equals(subjectId))
+				.map(Assignment::getId)
+				.toList();
+	}
+	
+	protected List<HomeworkStatus> filterUnfinishedStatus(List<Long>assignmentIds){
 		return dao.findAll().stream()
-				.filter(s -> s.getAssignment() != null && targetIds.contains(s.getAssignment().getId()))
+				.filter(s -> s.getAssignment() != null && assignmentIds.contains(s.getAssignment().getId()))
 				.filter(s -> !s.isSubmitted() || !s.isCorrected()).collect(Collectors.toList());
 	}
 

@@ -22,7 +22,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.work.SchoolScore.dao.AssignmentDAO;
 import com.work.SchoolScore.dao.HomeworkStatusDAO;
 import com.work.SchoolScore.dto.homework.HomeworkStatusRequest;
+import com.work.SchoolScore.model.Assignment;
 import com.work.SchoolScore.model.HomeworkStatus;
+import com.work.SchoolScore.model.Subject;
 
 @ExtendWith(MockitoExtension.class)
 class HomeworkStatusServiceImplTest {
@@ -105,14 +107,91 @@ class HomeworkStatusServiceImplTest {
 	public void update_noFound() {
 
 		var spyService = spy(service);
-		
+
 		HomeworkStatusRequest req = new HomeworkStatusRequest(true, true);
 
 		doReturn(Optional.empty()).when(dao).findById(1L);
 
-		assertThrows(RuntimeException.class, ()->
-				spyService.update(1L, req)
-				);
+		assertThrows(RuntimeException.class, () -> spyService.update(1L, req));
 	}
+
+	@Test
+	public void findUnfinishedBySubject() {
+
+		var spyService = spy(service);
+		
+		doReturn(List.of(1L,2L)).when(spyService).getAssignmentBySubjectId(10L);
+		
+		HomeworkStatus s1 = new HomeworkStatus();
+		HomeworkStatus s2 = new HomeworkStatus();
+
+		doReturn(List.of(s1,s2)).when(spyService).filterUnfinishedStatus(any());
+		
+		var result = spyService.findUnfinishedBySubject(10L);
+		
+		assertEquals(2, result.size());
+		
+		verify(spyService).getAssignmentBySubjectId(10L);
+		verify(spyService).filterUnfinishedStatus(any());
+	}
+
+	// 測試子方法
+	@Test
+	public void getAssignmentBySubjectId() {
+		
+		var spyService = spy(service);
+		
+		// 設置 假資料
+		Subject s1 = new Subject();
+		s1.setId(1L);
+		
+		Assignment a1 = new Assignment();
+		a1.setSubject(s1);
+		
+		doReturn(List.of(a1)).when(assignmentDao).findAll();
+		
+		var result = spyService.getAssignmentBySubjectId(1L);
+		
+		assertEquals(1, result.size());
+		verify(assignmentDao).findAll();
+	}
+
+	@Test
+	public void filterUnfinishedStatus() {
+		
+		var spyService = spy(service);
+		
+		// 三種情況資料
+		// 未繳 (應保留)
+		HomeworkStatus s1 = new HomeworkStatus();
+		Assignment a1 = new Assignment();
+		a1.setId(1L);
+		s1.setAssignment(a1);
+		s1.setSubmitted(false);  
+		
+		// 有繳未訂正 (保留)
+		HomeworkStatus s2 = new HomeworkStatus();
+		s2.setAssignment(a1);
+		s2.setSubmitted(true);
+		s2.setCorrected(false);
+		
+		// 有交有訂正(過濾)
+		HomeworkStatus s3 = new HomeworkStatus();
+		s3.setAssignment(a1);
+		s3.setSubmitted(true);
+		s3.setCorrected(true);
+		
+		
+		doReturn(List.of(s1,s2,s3)).when(dao).findAll();
+		
+		var result = spyService.filterUnfinishedStatus(List.of(1L));
+		
+		assertEquals(2, result.size());
+		verify(dao).findAll();
+	}
+	
+	
+	
+	
 
 }
