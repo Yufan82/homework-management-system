@@ -1,144 +1,150 @@
-/**
- * 
- */
-
-// ==========================
-// 假資料（模擬後端）
-// ==========================
-let homeworkData = {};
-
-const subjects = ["國文", "英文"];
-const categories = {
-    "國文": ["習作"],
-    "英文": ["單字"]
-};
-
-// 初始化
-for (let i = 1; i <= 40; i++) {
-    homeworkData[i] = [
-        {
-            subject: "國文",
-            category: "習作",
-            name: "作業A",
-            submitted: false
-        },
-        {
-            subject: "國文",
-            category: "習作",
-            name: "作業B",
-            submitted: false
-        },
-        {
-            subject: "英文",
-            category: "單字",
-            name: "作業C",
-            submitted: false
-        }
-    ];
-}
-
-// ==========================
-// DOM
-// ==========================
-const seatContainer = document.getElementById("seatContainer");
-const resultArea = document.getElementById("resultArea");
+const API_BASE = "http://localhost:8081/api/homework-status";
 
 let currentSeat = null;
+let modal = new bootstrap.Modal(document.getElementById('confirmModal'));
 let selectedItem = null;
 
-// Modal
-const modal = new bootstrap.Modal(document.getElementById('confirmModal'));
-const confirmBtn = document.getElementById("confirmBtn");
+// ==========================
+// 座號初始化
+// ==========================
+const seatContainer = document.getElementById("seatContainer");
 
-// ==========================
-// 座號
-// ==========================
 for (let i = 1; i <= 40; i++) {
     const btn = document.createElement("button");
-    btn.innerText = i;
     btn.className = "btn btn-outline-primary seat-btn";
+    btn.innerText = i;
 
-    btn.onclick = () => {
-        currentSeat = i;
-        renderData();
-    };
+    btn.onclick = () => loadSeatData(i);
 
     seatContainer.appendChild(btn);
 }
 
 // ==========================
-// 渲染資料（重點）
+// 載入 API 資料
 // ==========================
-function renderData() {
+async function loadSeatData(seatNo) {
+    currentSeat = seatNo;
 
-    const data = homeworkData[currentSeat];
+    try {
+        const res = await fetch(`${API_BASE}/seat/${seatNo}/unfinished`);
+        const data = await res.json();
 
-    // 只抓未交
-    const unsubmitted = data.filter(d => !d.submitted);
+        renderData(data);
 
-    if (unsubmitted.length === 0) {
-        resultArea.innerHTML = "🎉 全部已繳交";
+    } catch (err) {
+        console.error("API 錯誤", err);
+    }
+}
+
+// ==========================
+// 固定科目排序（重點🔥）
+// ==========================
+const SUBJECT_ORDER = ["國文", "英文", "數學", "自然", "社會", "其他"];
+
+// ==========================
+// 渲染
+// ==========================
+function renderData(data) {
+
+    const resultArea = document.getElementById("resultArea");
+
+    if (data.length === 0) {
+        resultArea.innerHTML = "🎉 全部完成";
         return;
     }
 
-    // 分組（subject → category）
+    // 分組
     const map = {};
 
-    unsubmitted.forEach(item => {
-        if (!map[item.subject]) {
-            map[item.subject] = {};
+    data.forEach(item => {
+        if (!map[item.subjectName]) {
+            map[item.subjectName] = {};
         }
 
-        if (!map[item.subject][item.category]) {
-            map[item.subject][item.category] = [];
+        if (!map[item.subjectName][item.categoryName]) {
+            map[item.subjectName][item.categoryName] = [];
         }
 
-        map[item.subject][item.category].push(item);
+        map[item.subjectName][item.categoryName].push(item);
     });
 
-    // 組 HTML
     let html = "";
 
-    for (let subject in map) {
+    // 👉 按固定順序排列
+    SUBJECT_ORDER.forEach(subject => {
+
+        if (!map[subject]) return;
+
         html += `<div class="subject-title">${subject}</div>`;
 
-        for (let category in map[subject]) {
+        Object.keys(map[subject]).forEach(category => {
+
             html += `<div class="category-title">| ${category} |</div>`;
 
             map[subject][category].forEach(item => {
+
+                let statusText = !item.submitted ? "未交" : "未訂正";
+
                 html += `
                     <button class="btn btn-danger assignment-btn"
-                        onclick="openModal('${item.name}')">
-                        ${item.name}
+                        onclick='openModal(${JSON.stringify(item)})'>
+                        ${item.item} (${statusText})
                     </button>
                 `;
             });
-        }
-    }
+        });
+    });
 
     resultArea.innerHTML = html;
 }
 
 // ==========================
-// 打開 Modal
+// 開啟 Modal
 // ==========================
-function openModal(name) {
-    selectedItem = homeworkData[currentSeat].find(i => i.name === name);
+function openModal(item) {
+    selectedItem = item;
 
     document.getElementById("modalText").innerText =
-        `確定將「${name}」標記為已繳交嗎？`;
+        `確定更新「${item.item}」狀態？`;
 
     modal.show();
 }
 
 // ==========================
-// 確認按鈕
+// 確認更新（呼叫 API）
 // ==========================
-confirmBtn.onclick = () => {
-    if (selectedItem) {
-        selectedItem.submitted = true;
+document.getElementById("confirmBtn").onclick = async () => {
+
+    if (!selectedItem) return;
+
+    let newSubmitted = selectedItem.submitted;
+    let newCorrected = selectedItem.corrected;
+
+    // 邏輯（重要🔥）
+    if (!selectedItem.submitted) {
+        newSubmitted = true;
+    } else if (!selectedItem.corrected) {
+        newCorrected = true;
     }
 
-    modal.hide();
-    renderData();
+    try {
+        await fetch(`${API_BASE}/${selectedItem.id}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                submitted: newSubmitted,
+                corrected: newCorrected
+            })
+        });
+
+        modal.hide();
+
+        // 👉 重新載入（即時更新）
+        loadSeatData(currentSeat);
+
+    } catch (err) {
+        console.error("更新失敗", err);
+    }
 };
