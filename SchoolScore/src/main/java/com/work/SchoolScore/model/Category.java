@@ -30,19 +30,24 @@ public class Category {
     @JoinColumn(name = "subject_id", nullable = false) // 對齊 Liquibase 外鍵欄位
 	@Schema(description = "所屬科目")
 	private Subject subject; // Model 關聯：直接引用 Subject 物件
+    
+    @Column(name = "order_no")
+	@Schema(description = "作業排序", example = "10")
+	private Integer orderNo;
 
 	public Category() {
 	}
 
-	public Category(Long id, String name, Subject subject) {
+	public Category(Long id, String name, Subject subject, Integer orderNo) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.subject = subject;
+		this.orderNo = orderNo;
 	}
 
-	// Setter Getter
-
+	
+	// Getter & Setter
 	public Long getId() {
 		return id;
 	}
@@ -67,9 +72,20 @@ public class Category {
 		this.subject = subject;
 	}
 
-	@Override
-	public String toString() {
-		return "Category [id=" + id + ", name=" + name + ", subject=" + subject + "]";
+	public Integer getOrderNo() {
+		return orderNo;
 	}
 
+	public void setOrderNo(Integer orderNo) {
+		this.orderNo = orderNo;
+	}
+
+	@Override
+	public String toString() {
+		return "Category [id=" + id + ", name=" + name + ", subject=" + subject + ", orderNo=" + orderNo + "]";
+	}
+
+	
+	
+	
 }

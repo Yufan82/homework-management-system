@@ -1,0 +1,56 @@
+databaseChangeLog:
+  # 1️ 加欄位（結構變更）
+  - changeSet:
+      id: 002-add-order-no-to-subject
+      author: you
+      changes:
+        - addColumn:
+            tableName: subject
+            columns:
+              - column:
+                  name: order_no
+                  type: INT
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+
+  # 2️初始化排序（資料變更）
+  - changeSet:
+      id: 003-init-subject-order
+      author: you
+      changes:
+        - update:
+            tableName: subject
+            columns:
+              - column: { name: order_no, valueNumeric: 10 }
+            where: name = '國文'
+
+        - update:
+            tableName: subject
+            columns:
+              - column: { name: order_no, valueNumeric: 20 }
+            where: name = '英文'
+
+        - update:
+            tableName: subject
+            columns:
+              - column: { name: order_no, valueNumeric: 30 }
+            where: name = '數學'
+
+        - update:
+            tableName: subject
+            columns:
+              - column: { name: order_no, valueNumeric: 40 }
+            where: name = '自然'
+
+        - update:
+            tableName: subject
+            columns:
+              - column: { name: order_no, valueNumeric: 50 }
+            where: name = '社會'
+
+        - update:
+            tableName: subject
+            columns:
+              - column: { name: order_no, valueNumeric: 60 }
+            where: name = '其他'

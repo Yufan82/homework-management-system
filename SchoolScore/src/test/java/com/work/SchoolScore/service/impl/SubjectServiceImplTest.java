@@ -29,7 +29,7 @@ class SubjectServiceImplTest {
 	public void findAll() {
 		
 		List<Subject> monList = List.of(
-					new Subject(1L,"國文")
+					new Subject(1L,"國文",10)
 				);
 		
 		when(dao.findAll()).thenReturn(monList);
@@ -68,7 +68,7 @@ class SubjectServiceImplTest {
 	@Test
 	public void save() {
 				
-		Subject s = new Subject(1L,"Test");
+		Subject s = new Subject(1L,"Test",10);
 		
 		when(dao.save(any(Subject.class))).thenReturn(s);
 		

@@ -23,6 +23,10 @@ public class Subject {
 	@Column(nullable = false)
     @Schema(description = "科目名稱", example = "國文")
     private String name; // 國文、英文、數學、自然、社會、其他
+	
+	@Column(name = "order_no")
+	@Schema(description = "科目排序", example = "10")
+	private Integer orderNo;
     
 	public Subject() {
 	}
@@ -31,29 +35,46 @@ public class Subject {
 	public Subject(Long id) {
         this.id = id;
     }
-
-	public Subject(Long id, String name) {
+	
+	
+	public Subject(Long id, String name, Integer orderNo) {
+		super();
 		this.id = id;
 		this.name = name;
+		this.orderNo = orderNo;
 	}
-	
+
+	// Getter & Setter
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
 
+	public Integer getOrderNo() {
+		return orderNo;
+	}
+
+	public void setOrderNo(Integer orderNo) {
+		this.orderNo = orderNo;
+	}
+
 	@Override
 	public String toString() {
-		return "Subject [id=" + id + ", 科目=" + name + "]";
+		return "Subject [id=" + id + ", name=" + name + ", orderNo=" + orderNo + "]";
 	}
+
+	
     
 	
     

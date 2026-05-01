@@ -42,7 +42,7 @@ class CategoryServiceImplTest {
 
 		List<Category> moList = List.of(
 
-				new Category(1L, "AAA", subject)
+				new Category(1L, "AAA", subject,10)
 
 		);
 
