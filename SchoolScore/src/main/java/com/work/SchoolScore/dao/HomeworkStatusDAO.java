@@ -18,7 +18,13 @@ public interface HomeworkStatusDAO extends JpaRepository<HomeworkStatus, Long>, 
     List<HomeworkStatus> findBySeatNoAndSubmittedFalse(int seatNo);
     
     // 使用 JPQL 簡化：只需要傳入一個 seatNo
-    @Query("SELECT h FROM HomeworkStatus h WHERE h.seatNo = :seatNo AND (h.submitted = false OR h.corrected = false)")
+    @Query("SELECT h FROM HomeworkStatus h " +
+            "JOIN FETCH h.assignment a " +
+            "JOIN FETCH a.subject s " +
+            "JOIN FETCH a.category c " +
+            "WHERE h.seatNo = :seatNo " +
+            "AND (h.submitted = false ) " +
+            "ORDER BY s.orderNo ASC, c.orderNo ASC")
     List<HomeworkStatus> findUnfinishedBySeatNo(@Param("seatNo") int seatNo);
 
     // 2. 根據作業 ID 查詢所有學生的繳交狀況 

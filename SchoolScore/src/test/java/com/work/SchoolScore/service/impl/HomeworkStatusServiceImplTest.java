@@ -189,9 +189,21 @@ class HomeworkStatusServiceImplTest {
 		assertEquals(2, result.size());
 		verify(dao).findAll();
 	}
-	
-	
-	
+
+	@Test
+	public void findUnfinishedBySeatNo() {
+		
+		var spyService = spy(service);
+		
+		HomeworkStatus s1 = new HomeworkStatus();
+		
+		doReturn(List.of(s1)).when(dao).findUnfinishedBySeatNo(5);
+		
+		var result = spyService.findUnfinishedBySeatNo(5);
+		
+		assertEquals(1, result.size());
+		verify(dao).findUnfinishedBySeatNo(5);
+	}
 	
 
 }
